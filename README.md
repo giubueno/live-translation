@@ -28,7 +28,7 @@ sequenceDiagram
     WebApp->>-Administrator: 3. QR code.
     Expectator->>+Expectator: 4. Scan QR code.
     Expectator->>WebApp: 5. Access live translation (websocket).
-    Expectator->>WebApp: 5. Select language.
+    Expectator->>WebApp: 5.2. Select language.
     Presenter->>+AutoTranslator: 6. Live audio.
     AutoTranslator->>+WebApp: 7. Translation.
     WebApp->>-Expectator: 8. Translation.
