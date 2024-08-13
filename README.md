@@ -26,10 +26,10 @@ sequenceDiagram
     Administrator->>+WebApp: 1. Start event.
     WebApp->>WebApp: 2. Generate QR code.
     WebApp->>-Administrator: 3. QR code.
-    Expectator->>+Expectator: 4. Scan QR code.
-    Expectator->>WebApp: 5. Access live translation (websocket).
-    Expectator->>WebApp: 5.2. Select language.
+    Spectator->>+Spectator: 4. Scan QR code.
+    Spectator->>WebApp: 5. Access live translation (websocket).
+    Spectator->>WebApp: 5.2. Select language.
     Presenter->>+AutoTranslator: 6. Live audio.
     AutoTranslator->>+WebApp: 7. Translation.
-    WebApp->>-Expectator: 8. Translation.
+    WebApp->>-Spectator: 8. Translation.
 ```
