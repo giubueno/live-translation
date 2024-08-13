@@ -16,7 +16,7 @@ This project is divided into parts, one stand alone Python script that collects 
 The normal flow involves someone starting an live event and consequently generating a QR Code that points to the event.
 
 ### Access
-Expectators interested in the translation of the event can scan the QR code and access the live translation and select the target language.
+Spectators interested in the translation of the event can scan the QR code and access the live translation and select the target language.
 
 ### Broadcast
 The Translator service will receive chunks of audio, translate then and transmit them to the Web Application and this one will broadcast to the connected expectators.
