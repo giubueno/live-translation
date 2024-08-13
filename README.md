@@ -33,3 +33,6 @@ sequenceDiagram
     AutoTranslator->>+WebApp: 7. Translation.
     WebApp->>-Spectator: 8. Translation.
 ```
+
+## Wireframe
+![new event](documentation/new-event.png)
