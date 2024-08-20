@@ -6,6 +6,9 @@ This is a FastAPI project designed to provide a robust and efficient web API for
 
 - Python 3.7+
 - pip
+- Postgres
+- Redis
+- Kafka
 
 ## Quick Run
 
