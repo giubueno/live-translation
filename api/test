@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Step 1: Activate the virtual environment
+source env/bin/activate
+
+# Step 2: Install the requirements
+pip install -r requirements.txt
+
+# Step 3: Run the FastAPI app
+pytest test_main.py

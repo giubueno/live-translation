@@ -20,9 +20,32 @@ sources = {}
 
 events = {}
 
+translations = [
+    {
+        1: "Hello",
+        2: "Hola",
+        3: "Olá",
+        4: "Привет",
+        5: "你好",
+        6: "مرحبا",
+        7: "Merhaba"
+    }, 
+    {
+        1: "Goodbye",
+        2: "Adiós",
+        3: "Adeus",
+        4: "До свидания",
+        5: "再见",
+        6: "مع السلامة",
+        7: "Hoşça kal"
+    }
+]
+
 @app.get("/")
 def read_root():
     return {"version": "0.1.0"}
+
+# HEALTH endpoints
 
 @app.get("/ready")
 def ready_probe():
@@ -33,6 +56,7 @@ def live_probe():
     return {"status": "live"}
 
 # SOURCES endpoints
+
 @app.get("/sources")
 def read_sources(q: Union[str, None] = None) -> List[Source]:
     return sources.values()
@@ -108,6 +132,7 @@ def delete_language(language_id: int) -> Language:
         return language
 
 # EVENTS endpoints
+
 @app.get("/events")
 def read_events(q: Union[str, None] = None) -> List[Event]:
     return events.values()
@@ -143,3 +168,24 @@ def delete_event(event_id: int) -> Event:
         event = events[event_id]
         del events[event_id]
         return event
+
+
+# TRANSLATIONS endpoints
+@app.get("/translations")
+def read_translations(q: Union[str, None] = None) -> List[dict]:
+    return translations
+
+@app.get("/translations/{language_id}")
+def read_translation(language_id: int, q: Union[str, None] = None) -> str:
+    if language_id not in idioms:
+        raise HTTPException(status_code=404, detail=f"Language with id {language_id} not found")
+
+    if not translations:
+        return None
+
+    return translations[-1][language_id]
+
+@app.post("/translations")
+def create_translation(translation: dict) -> dict:
+    translations.append(translation)
+    return translation

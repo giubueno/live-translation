@@ -10,16 +10,6 @@ class Event(BaseModel):
     image: str
     link: str
     category: str
-    tags: str
-    isFeatured: bool
-    isPublished: bool
-    isDeleted: bool
-    createdAt: str
-    updatedAt: str
-    deletedAt: str
-    createdBy: int
-    updatedBy: int
-    deletedBy: int
 
 class Source(BaseModel):
     id: int
