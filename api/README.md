@@ -1,6 +1,6 @@
 # Live Translation API
 
-This is a FastAPI project designed to provide a robust and efficient web API.
+This is a FastAPI project designed to provide a robust and efficient web API for the Live Translation frontend.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ This is a FastAPI project designed to provide a robust and efficient web API.
 
 ## Quick Run
 
-There is a script that will called **run** that will quickly initiate the API. Try it first, please.
+There is a script called **run** that will quickly initiate the API. Try it first, please.
 
 ```bash
 ./run
