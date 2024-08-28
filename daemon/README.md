@@ -4,7 +4,13 @@ This is the the program that listens to the input (usually a microphone), transc
 
 ## Virtual Environment
 
-We have created a virtual environment to help you to contain the daemon's dependencies.
+Create a virtual environment.
+
+```sh
+python3 -m venv env
+```
+
+then activate it via:
 
 ```sh
 source env/bin/activate
