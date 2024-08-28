@@ -123,14 +123,18 @@ def run():
         "es": "es-US",
         "en": "en-US",
         "pt": "pt-BR",
-        "cn": "cmn-CN"
+        "cn": "cmn-CN",
+        "tr": "tr-TR",
+        "ar": "ar"
     }
 
     voices = {
         "es": "es-US-Studio-B",
         "en": "en-US-Standard-C",
         "pt": "pt-BR-Neural2-B",
-        "cn": "cmn-CN-Standard-A"
+        "cn": "cmn-CN-Standard-A",
+        "tr": "tr-TR-Standard-A",
+        "ar": "ar-XA-Standard-A"
     }
 
     if args.language not in languages:
