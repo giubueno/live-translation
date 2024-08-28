@@ -106,35 +106,38 @@ def execute(language="es-US", voice="es-US-Studio-B", debug=False):
             speak(text, language, voice)
         except exceptions.BadRequest as exc:
             os.system('clear')
-        except:
+        except Exception as exc:
+            print(exc)
             break
 
-# Spanish
-# execute(language="es-US", voice="es-US-Studio-B")
 
-# Parse the command line arguments
-parser = argparse.ArgumentParser(description="Description of your script")
-parser.add_argument("-l", "--language", help="Language", required=True)
-parser.add_argument("-d", "--debug", help="Debug", required=False, default=False)
-args = parser.parse_args()
+def run():
 
-languages = {
-    "es": "es-US",
-    "en": "en-US",
-    "pt": "pt-BR",
-    "cn": "cmn-CN"
-}
+    # Parse the command line arguments
+    parser = argparse.ArgumentParser(description="Description of your script")
+    parser.add_argument("-l", "--language", help="Language", required=True)
+    parser.add_argument("-d", "--debug", help="Debug", required=False, default=False)
+    args = parser.parse_args()
 
-voices = {
-    "es": "es-US-Studio-B",
-    "en": "en-US-Standard-C",
-    "pt": "pt-BR-Neural2-B",
-    "cn": "cmn-CN-Standard-A"
-}
+    languages = {
+        "es": "es-US",
+        "en": "en-US",
+        "pt": "pt-BR",
+        "cn": "cmn-CN"
+    }
 
-if args.language not in languages:
-    print("Language not supported")
-    exit()
+    voices = {
+        "es": "es-US-Studio-B",
+        "en": "en-US-Standard-C",
+        "pt": "pt-BR-Neural2-B",
+        "cn": "cmn-CN-Standard-A"
+    }
 
-# Portuguese
-execute(language=languages[args.language], voice=voices[args.language], debug=args.debug)
+    if args.language not in languages:
+        print("Language not supported")
+        exit()
+
+    execute(language=languages[args.language], voice=voices[args.language], debug=args.debug)
+
+if __name__ == "__main__":
+    run()

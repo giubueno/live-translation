@@ -21,3 +21,11 @@ Then install the dependencies:
 ```sh
 pip install -r requirements.txt
 ```
+
+### External Services
+
+This code relies heavily on Google Cloud services such as:
+- Cloud Text-to-Speech API
+- Cloud Translation API
+
+You need to make sure that you have a registered account with these two services activated.
