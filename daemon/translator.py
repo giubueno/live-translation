@@ -110,32 +110,30 @@ def execute(language="es-US", voice="es-US-Studio-B", debug=False):
             print(exc)
             break
 
+languages = {
+    "es": "es-US",
+    "en": "en-US",
+    "pt": "pt-BR",
+    "cn": "cmn-CN",
+    "tr": "tr-TR",
+    "ar": "ar"
+}
+
+voices = {
+    "es": "es-US-Studio-B",
+    "en": "en-US-Standard-C",
+    "pt": "pt-BR-Neural2-B",
+    "cn": "cmn-CN-Standard-A",
+    "tr": "tr-TR-Standard-A",
+    "ar": "ar-XA-Standard-A"
+}
 
 def run():
-
     # Parse the command line arguments
     parser = argparse.ArgumentParser(description="Description of your script")
     parser.add_argument("-l", "--language", help="Language", required=True)
     parser.add_argument("-d", "--debug", help="Debug", required=False, default=False)
     args = parser.parse_args()
-
-    languages = {
-        "es": "es-US",
-        "en": "en-US",
-        "pt": "pt-BR",
-        "cn": "cmn-CN",
-        "tr": "tr-TR",
-        "ar": "ar"
-    }
-
-    voices = {
-        "es": "es-US-Studio-B",
-        "en": "en-US-Standard-C",
-        "pt": "pt-BR-Neural2-B",
-        "cn": "cmn-CN-Standard-A",
-        "tr": "tr-TR-Standard-A",
-        "ar": "ar-XA-Standard-A"
-    }
 
     if args.language not in languages:
         print("Language not supported")
