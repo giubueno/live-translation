@@ -12,7 +12,7 @@ function App() {
       <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Event />} />
-          <Route path="/translations" element={<Translation />} />
+          <Route path="/translations/:language" element={<Translation />} />
           <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
