@@ -1,18 +1,21 @@
 import React from 'react';
 import { Container, Typography, Button } from '@mui/material';
-import EventForm from './components/EventForm';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Event from './pages/Event';
+import Home from './pages/Home';
+import Translation from './pages/Translation';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" align="center" gutterBottom>
-        Live Translations
-      </Typography>
-      <Button variant="contained" color="primary" fullWidth>
-        New event
-      </Button>
-      <EventForm />
-    </Container>
+    <Router>
+      <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/events" element={<Event />} />
+          <Route path="/translations" element={<Translation />} />
+          <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
 
