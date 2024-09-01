@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Define variables
+BUCKET_NAME=$BUCKET_NAME
+BUILD_DIR=$BUILD_DIR
+AWS_PROFILE=$AWS_PROFILE  # Optional: Specify the AWS CLI profile to use
+AWS_REGION=$AWS_REGION  # Optional: Specify the AWS region where your bucket is located
+
+# Build the React app
+echo "Building the React app..."
+npm run build
+
+# Check if build was successful
+if [ $? -eq 0 ]; then
+    echo "React app built successfully."
+else
+    echo "React app build failed. Exiting..."
+    exit 1
+fi
+
+# Sync build directory to S3 bucket
+echo "Deploying to S3 bucket: $BUCKET_NAME"
+aws s3 sync $BUILD_DIR s3://$BUCKET_NAME --delete --profile $AWS_PROFILE --region $AWS_REGION
+
+# Check if sync was successful
+if [ $? -eq 0 ]; then
+    echo "Deployment successful."
+else
+    echo "Deployment failed."
+    exit 1
+fi
+
+# Set the S3 bucket to host the website
+echo "Configuring S3 bucket for static website hosting..."
+aws s3 website s3://$BUCKET_NAME/ --index-document index.html --error-document index.html --profile $AWS_PROFILE --region $AWS_REGION
+
+# Set S3 bucket policy to make the website publicly accessible
+echo "Setting S3 bucket policy to allow public access..."
+cat <<EOF > s3-bucket-policy.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::$BUCKET_NAME/*"
+        }
+    ]
+}
+EOF
+
+aws s3api put-bucket-policy --bucket $BUCKET_NAME --policy file://s3-bucket-policy.json --profile $AWS_PROFILE --region $AWS_REGION
+
+# Clean up
+rm s3-bucket-policy.json
+
+echo "Deployment complete. Your React app is now live at http://$BUCKET_NAME.s3-website-$AWS_REGION.amazonaws.com"
