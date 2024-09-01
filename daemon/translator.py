@@ -7,6 +7,7 @@ from google.cloud import translate_v2 as translate
 from google.cloud import exceptions
 import os
 import argparse
+import threading
 
 def audio_to_text(audio_file, debug=False):
     recognizer = sr.Recognizer()
@@ -30,7 +31,7 @@ def record_audio():
     CHUNK = 1024
     RECORD_SECONDS = 5
     current_time_epoch = int(time.time())
-    OUTPUT_FILENAME = f"outputs/live/{current_time_epoch}_output.wav"
+    OUTPUT_FILENAME = f"/tmp/{current_time_epoch}_output.wav"
 
     audio = pyaudio.PyAudio()
 
@@ -75,7 +76,7 @@ def speak(content, language="es-US", voice="es-US-Studio-B"):
     )
 
     current_time_epoch = int(time.time())
-    file_path = f"outputs/live/{current_time_epoch}_{language}.mp3"
+    file_path = f"/tmp/{current_time_epoch}_{language}.mp3"
 
     with open(file_path, "wb") as out:
         out.write(response.audio_content)
@@ -96,19 +97,39 @@ def translate_text(target: str, text: str) -> dict:
 def execute(language="es-US", voice="es-US-Studio-B", debug=False):
     os.system('clear')
     while True:
-        try:
-            file_path = record_audio()
-            english_text = audio_to_text(file_path, debug=debug)
-            os.system(f"rm {file_path}")
-            translated_text = translate_text(language, english_text)
-            text = translated_text["translatedText"]
-            print("T: " + text)
-            speak(text, language, voice)
-        except exceptions.BadRequest as exc:
-            os.system('clear')
-        except Exception as exc:
-            print(exc)
-            break
+        file_path = record_audio()
+        temporary_thread = threading.Thread(target=execute_async, args=(language, voice, debug, file_path))
+        temporary_thread.start()        
+
+def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_path=""):
+    if file_path == "":
+        return
+
+    if not os.path.exists(file_path):
+        return
+
+    try:
+        # convert the audio file to text
+        english_text = audio_to_text(file_path, debug=debug)
+        # remove the temp file
+        os.system(f"rm {file_path}")
+        # avoid empty text
+        if not english_text:
+            return
+
+        # post the english text to our API to get the translated text
+        post_text(english_text)
+
+        #translated_text = translate_text(language, english_text)
+        #text = translated_text["translatedText"]
+        
+    except Exception as exc:
+        print(exc)
+        return
+
+def post_text(text):
+    # post the text to the API
+    url = "http://http://192.168.0.148:5000/api/v1/translate"
 
 languages = {
     "es": "es-US",
@@ -116,7 +137,8 @@ languages = {
     "pt": "pt-BR",
     "cn": "cmn-CN",
     "tr": "tr-TR",
-    "ar": "ar"
+    "ar": "ar",
+    "de": "de-DE"
 }
 
 voices = {
@@ -125,7 +147,8 @@ voices = {
     "pt": "pt-BR-Neural2-B",
     "cn": "cmn-CN-Standard-A",
     "tr": "tr-TR-Standard-A",
-    "ar": "ar-XA-Standard-A"
+    "ar": "ar-XA-Standard-A",
+    "de": "de-DE-Standard-A"
 }
 
 def run():
