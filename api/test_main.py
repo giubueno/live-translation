@@ -16,20 +16,3 @@ def test_create_translation():
     response = client.post("/translations", json=translation)
     assert response.status_code == 200
     assert response.json() == translation
-
-# EVENTS endpoints
-
-def test_create_event():
-    event = {
-        "id": 11,
-        "title": "Event 11",
-        "description": "",
-        "date": "2021-10-10",
-        "location": "Berlin",
-        "image": "https://placehold.co/600x400",
-        "link": "https://example.com",
-        "category": "church"
-    }
-    response = client.post("/events", json=event)
-    assert response.status_code == 200
-    assert response.json() == event

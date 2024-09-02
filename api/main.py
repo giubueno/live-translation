@@ -1,7 +1,6 @@
 from typing import Union, List
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models import Source, Language, Event
 
 app = FastAPI()
 
@@ -48,6 +47,6 @@ def read_translation(language: str, q: Union[str, None] = None) -> str:
     return translations[language][-1]
 
 @app.post("/translations")
-def create_translation(language: dict) -> dict:
-    translations.append(translation)
+def create_translation(language: str, text: str) -> dict:
+    translations[language].append(text)
     return translation
