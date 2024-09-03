@@ -129,8 +129,9 @@ def execute(language="es-US", voice="es-US-Studio-B", debug=False):
     os.system('clear')
     while True:
         file_path = record_audio()
+        # translate and post the text in a new thread to avoid losing the next audio.
         temporary_thread = threading.Thread(target=execute_async, args=(language, voice, debug, file_path))
-        temporary_thread.start()        
+        temporary_thread.start()
 
 def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_path=""):
     if file_path == "":
