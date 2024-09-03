@@ -18,15 +18,6 @@ app.add_middleware(
 # Mock data
 
 translations = {
-    "english": ["Hello"],
-    "spanish": ["Hola"],
-    "russian": ["Привет"],
-    "chinese": ["你好"],
-    "arabic": ["مرحبا"],
-    "turkish": ["Merhaba"],
-    "german": ["Hallo"],
-    "chinese": ["你好"],
-    "french": ["Bonjour"],
 }
 
 class Message(BaseModel):
@@ -36,6 +27,8 @@ class Message(BaseModel):
 class Translation(BaseModel):
     total: int
     messages: List[str]
+    language: str
+    languages: List[str]
 
 @app.get("/")
 def read_root():
@@ -47,16 +40,31 @@ def read_root():
 def health_check():
     return {"status": "healthy"}
 
+@app.get("/languages")
+def read_languages() -> List[str]:
+    return list(translations.keys())    
+
 @app.get("/translations/{language}")
-def read_translation(language: str, q: Union[str, None] = None) -> Translation:
+def read_translation(language: str, q: Union[str, None] = None) -> Translation | None:
     if not translations:
         return None
 
-    translation = Translation(total=len(translations[language]), messages=translations[language])
+    if language not in translations.keys():
+        return Translation(language=language, languages=translations.keys(), total=0, messages=[])
+
+    translation = Translation(
+        language=language,
+        languages=translations.keys(),
+        total=len(translations[language]),
+        messages=translations[language])
+
     return translation
 
 @app.post("/translations")
 def create_translation(message: Message) -> Message:
+    if message.language not in translations.keys():
+        translations[message.language] = []
+    
     # prepend the time to the message with only hh:mm
     message.text = f"{datetime.now().strftime('%H:%M')}: {message.text}"
     translations[message.language].append(message.text)
