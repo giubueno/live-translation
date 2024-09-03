@@ -24,7 +24,9 @@ translations = {
     "russian": ["Привет"],
     "chinese": ["你好"],
     "arabic": ["مرحبا"],
-    "turkish": ["Merhaba"]
+    "turkish": ["Merhaba"],
+    "german": ["Hallo"],
+    "chinese": ["你好"],
 }
 
 class Message(BaseModel):
