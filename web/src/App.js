@@ -1,17 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import { Grid, FormControl, FormLabel, Radio, RadioGroup, FormControlLabel } from '@mui/material';
+import { FormControl, Select, MenuItem, InputLabel, Box } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
+import logo from "./images/logo.png";
+import background from "./images/background.png";
 
 // API URL - Change this to your API URL
-const URL = 'https://api.aboa.today';
+const URL = 'http://192.168.0.148:8000';
 
 function App() {
-  const [language, setLanguage] = useState('english');
-  const [text, setText] = useState();
+  const [language, setLanguage] = useState('german');
+  const [translation, setTranslation] = useState();
 
-  const handleRadioChange = (event) => {
+  const handleChange = (event) => {
     setLanguage(event.target.value);
-  };
+  }; 
   
   // Fetch data from API every 5 seconds
 // Fetch data from API every 5 seconds
@@ -19,35 +22,37 @@ useEffect(() => {
   const fetchData = () => {
     fetch(`${URL}/translations/${language}`)
       .then(response => response.json())
-      .then(data => setText(data));
+      .then(data => setTranslation(data))
+      .catch(error => console.error('Error:', error));
   };
 
   fetchData(); // Initial fetch
 
-  const intervalId = setInterval(fetchData, 5000); // Fetch every 5 seconds
+  const intervalId = setInterval(fetchData, 1000); // Fetch every 5 seconds
 
   return () => clearInterval(intervalId); // Cleanup interval on unmount
 }, [language]);
 
   return (
-    <Grid container spacing={0.5}>
-      <Grid columns={{ xs: 4, sm: 4, md: 4, lg: 4 }}>
-        <FormControl>
-          <FormLabel id="demo-radio-buttons-group-label">Language:</FormLabel>
-          <RadioGroup 
-            aria-labelledby="demo-radio-buttons-group-label" 
-            defaultValue="english" 
-            name="radio-buttons-group"
-            onChange={handleRadioChange}
+    <Grid container spacing={4}>
+      <Grid id="top" size={12} style={{ backgroundImage: `url(${background})` }}>
+        <img id="logo" src={logo} alt="Logo"/>
+        <FormControl id="language" sx={{ width: 200 }}>
+          <InputLabel id="demo-simple-select-label">Select a language</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={language}
+            label="Select a language"
+            onChange={handleChange}
           >
-            <FormControlLabel value="english" control={<Radio />} label="English" />
-            <FormControlLabel value="turkish" control={<Radio />} label="Turkish" />
-            <FormControlLabel value="arabic" control={<Radio />} label="Arabic" />
-          </RadioGroup>
+            {translation && translation.languages.map((lang) => <MenuItem value={lang}>{lang}</MenuItem>)}
+          </Select>
         </FormControl>
       </Grid>
-      <Grid columns={{ xs: 8, sm: 8, md: 8, lg: 8 }}>
-        <Typography variant="body1" gutterBottom>{text}</Typography>
+      <Grid id="translations" size={12}>
+        {translation && translation.messages.map((text) => <Typography variant="body1">{text}</Typography>) }
+        <Typography variant="body1"></Typography>
       </Grid>
     </Grid>
   );

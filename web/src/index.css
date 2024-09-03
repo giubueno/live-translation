@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+
+  .MuiBox-root {
+    padding: 1rem;
+  }
+
+  img#logo {
+    width: 15vh;
+  }
+
+  #language {
+    margin-top: 4vh;
+    margin-left: 2vh;
+  }
+
+  #translations {
+    padding: 1vh;
+  }

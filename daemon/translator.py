@@ -11,23 +11,25 @@ import threading
 import requests
 
 languages = {
-    "es": "es-US",
+    "es": "es-ES",
     "en": "en-US",
-    "pt": "pt-BR",
-    "cn": "cmn-CN",
+    "cn": "cn-CN",
     "tr": "tr-TR",
     "ar": "ar",
-    "de": "de-DE"
+    "de": "de-DE",
+    "fr": "fr-FR",
+    "ru": "ru-RU"
 }
 
 friendly_languages = {
     "es": "spanish",
     "en": "english",
-    "pt": "portuguese",
     "cn": "chinese",
     "tr": "turkish",
     "ar": "arabic",
-    "de": "german"
+    "de": "german",
+    "fr": "french",
+    "ru": "russian"
 }
 
 voices = {
@@ -37,7 +39,9 @@ voices = {
     "cn": "cmn-CN-Standard-A",
     "tr": "tr-TR-Standard-A",
     "ar": "ar-XA-Standard-A",
-    "de": "de-DE-Standard-A"
+    "de": "de-DE-Standard-A",
+    "fr": "fr-FR-Standard-A",
+    "ru": "ru-RU-Standard-A"
 }
 
 def audio_to_text(audio_file, debug=False):
@@ -60,7 +64,7 @@ def record_audio():
     CHANNELS = 1
     RATE = 44100
     CHUNK = 1024
-    RECORD_SECONDS = 5
+    RECORD_SECONDS = 2
     current_time_epoch = int(time.time())
     OUTPUT_FILENAME = f"/tmp/{current_time_epoch}_output.wav"
 
@@ -156,7 +160,7 @@ def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_pa
         
         
     except Exception as exc:
-        print(exc)
+        print(f"Error: {exc}")
         return
 
 def post_text(language, text):

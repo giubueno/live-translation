@@ -20,18 +20,22 @@ app.add_middleware(
 translations = {
     "english": ["Hello"],
     "spanish": ["Hola"],
-    "portuguese": ["Olá"],
     "russian": ["Привет"],
     "chinese": ["你好"],
     "arabic": ["مرحبا"],
     "turkish": ["Merhaba"],
     "german": ["Hallo"],
     "chinese": ["你好"],
+    "french": ["Bonjour"],
 }
 
 class Message(BaseModel):
     language: str
     text: str
+
+class Translation(BaseModel):
+    total: int
+    messages: List[str]
 
 @app.get("/")
 def read_root():
@@ -44,11 +48,12 @@ def health_check():
     return {"status": "healthy"}
 
 @app.get("/translations/{language}")
-def read_translation(language: str, q: Union[str, None] = None) -> str:
+def read_translation(language: str, q: Union[str, None] = None) -> Translation:
     if not translations:
         return None
 
-    return translations[language][-1]
+    translation = Translation(total=len(translations[language]), messages=translations[language])
+    return translation
 
 @app.post("/translations")
 def create_translation(message: Message) -> Message:
