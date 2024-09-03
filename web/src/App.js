@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Grid, FormControl, FormLabel, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
+// API URL - Change this to your API URL
 const URL = 'https://api.aboa.today';
 
 function App() {
