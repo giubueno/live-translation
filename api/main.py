@@ -1,6 +1,8 @@
 from typing import Union, List
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from datetime import datetime
 
 app = FastAPI()
 
@@ -25,6 +27,10 @@ translations = {
     "turkish": ["Merhaba"]
 }
 
+class Message(BaseModel):
+    language: str
+    text: str
+
 @app.get("/")
 def read_root():
     return {"version": "0.1.0"}
@@ -43,6 +49,8 @@ def read_translation(language: str, q: Union[str, None] = None) -> str:
     return translations[language][-1]
 
 @app.post("/translations")
-def create_translation(language: str, text: str) -> dict:
-    translations[language].append(text)
-    return translation
+def create_translation(message: Message) -> Message:
+    # prepend the time to the message with only hh:mm
+    message.text = f"{datetime.now().strftime('%H:%M')}: {message.text}"
+    translations[message.language].append(message.text)
+    return message
