@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Variables - customize these according to your needs
+AWS_REGION=$AWS_REGION
+ECR_REPOSITORY_NAME="${ECR_REPOSITORY_NAME}"
+DOCKER_IMAGE_NAME="${DOCKER_IMAGE_NAME}"
+DOCKER_TAG="latest"
+AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+# Full ECR repository URL
+ECR_URL="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}"
+
+# Build the Docker image
+echo "Building Docker image ${DOCKER_IMAGE_NAME}:${DOCKER_TAG}..."
+docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+
+# Authenticate Docker to the ECR registry
+echo "Authenticating Docker to ECR..."
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URL}
+
+# Tag the Docker image with the ECR repository URL
+echo "Tagging Docker image..."
+docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} ${ECR_URL}:${DOCKER_TAG}
+
+# Push the Docker image to ECR
+echo "Pushing Docker image to ECR..."
+docker push ${ECR_URL}:${DOCKER_TAG}
+
+# Deploy to ECS (or another service)
+# If you are deploying to ECS, you can use AWS CLI to update your ECS service to use the new image
+# This part is optional and depends on your deployment method
+# Example for ECS:
+# CLUSTER_NAME="my-cluster"
+# SERVICE_NAME="my-service"
+# echo "Updating ECS service..."
+# aws ecs update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --force-new-deployment
+
+echo "Deployment complete!"

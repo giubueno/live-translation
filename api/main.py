@@ -31,13 +31,9 @@ def read_root():
 
 # HEALTH endpoints
 
-@app.get("/ready")
-def ready_probe():
-    return {"status": "ready"}
-
-@app.get("/live")
-def live_probe():
-    return {"status": "live"}
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
 
 @app.get("/translations/{language}")
 def read_translation(language: str, q: Union[str, None] = None) -> str:

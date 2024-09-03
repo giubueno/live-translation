@@ -14,10 +14,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Make port 8000 available to the world outside this container
-EXPOSE 8000
+EXPOSE 80
 
 # Define environment variable
 ENV PYTHONUNBUFFERED=1
 
 # Run the FastAPI app with Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
