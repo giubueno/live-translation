@@ -8,6 +8,37 @@ from google.cloud import exceptions
 import os
 import argparse
 import threading
+import requests
+
+languages = {
+    "es": "es-US",
+    "en": "en-US",
+    "pt": "pt-BR",
+    "cn": "cmn-CN",
+    "tr": "tr-TR",
+    "ar": "ar",
+    "de": "de-DE"
+}
+
+friendly_languages = {
+    "es": "spanish",
+    "en": "english",
+    "pt": "portuguese",
+    "cn": "chinese",
+    "tr": "turkish",
+    "ar": "arabic",
+    "de": "german"
+}
+
+voices = {
+    "es": "es-US-Studio-B",
+    "en": "en-US-Standard-C",
+    "pt": "pt-BR-Neural2-B",
+    "cn": "cmn-CN-Standard-A",
+    "tr": "tr-TR-Standard-A",
+    "ar": "ar-XA-Standard-A",
+    "de": "de-DE-Standard-A"
+}
 
 def audio_to_text(audio_file, debug=False):
     recognizer = sr.Recognizer()
@@ -118,7 +149,7 @@ def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_pa
             return
 
         # post the english text to our API to get the translated text
-        post_text(english_text)
+        post_text(language, english_text)
 
         #translated_text = translate_text(language, english_text)
         #text = translated_text["translatedText"]
@@ -127,29 +158,23 @@ def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_pa
         print(exc)
         return
 
-def post_text(text):
+def post_text(language, text):
+    if not text:
+        return
+
     # post the text to the API
-    url = "http://http://192.168.0.148:5000/api/v1/translate"
-
-languages = {
-    "es": "es-US",
-    "en": "en-US",
-    "pt": "pt-BR",
-    "cn": "cmn-CN",
-    "tr": "tr-TR",
-    "ar": "ar",
-    "de": "de-DE"
-}
-
-voices = {
-    "es": "es-US-Studio-B",
-    "en": "en-US-Standard-C",
-    "pt": "pt-BR-Neural2-B",
-    "cn": "cmn-CN-Standard-A",
-    "tr": "tr-TR-Standard-A",
-    "ar": "ar-XA-Standard-A",
-    "de": "de-DE-Standard-A"
-}
+    url = "https://api.aboa.today/translations"
+    language_name = friendly_languages[language]
+    payload = {
+        "text": text,
+        "language": language_name
+    }
+    try:
+        requests.post(url, json=payload)
+    except Exception as exc:
+        # log the error and ignore it
+        print(exc)
+        return
 
 def run():
     # Parse the command line arguments
