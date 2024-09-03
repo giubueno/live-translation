@@ -35,7 +35,7 @@ class Message(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"version": "0.1.1"}
+    return {"version": "0.1.2"}
 
 # HEALTH endpoints
 
