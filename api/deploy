@@ -7,8 +7,12 @@ set -e
 AWS_REGION=$AWS_REGION
 ECR_REPOSITORY_NAME="${ECR_REPOSITORY_NAME}"
 DOCKER_IMAGE_NAME="${DOCKER_IMAGE_NAME}"
+TIMESTAMP=$(date '+%Y%m%d%H%M%S')
 DOCKER_TAG="latest"
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+# generage a timestamp
+
 
 # Full ECR repository URL
 ECR_URL="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}"
