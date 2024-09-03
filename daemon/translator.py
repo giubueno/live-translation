@@ -148,11 +148,11 @@ def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_pa
         if not english_text:
             return
 
-        # post the english text to our API to get the translated text
-        post_text(language, english_text)
+        translated_text = translate_text(language, english_text)
 
-        #translated_text = translate_text(language, english_text)
-        #text = translated_text["translatedText"]
+        # post the english text to our API to get the translated text
+        post_text(language, translated_text["translatedText"])
+        
         
     except Exception as exc:
         print(exc)
