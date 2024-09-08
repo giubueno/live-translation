@@ -12,14 +12,14 @@ import requests
 import math
 
 languages = {
-    "es": "es-ES",
-    "en": "en-US",
-    "cn": "cn-CN",
-    "tr": "tr-TR",
+    "es": "es",
+    "en": "en",
+    "cn": "cn",
+    "tr": "tr",
     "ar": "ar",
     "de": "de",
-    "fr": "fr-FR",
-    "ru": "ru-RU"
+    "fr": "fr",
+    "ru": "ru"
 }
 
 friendly_languages = {
