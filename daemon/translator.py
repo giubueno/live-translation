@@ -9,6 +9,7 @@ import os
 import argparse
 import threading
 import requests
+import math
 
 languages = {
     "es": "es-ES",
@@ -16,7 +17,7 @@ languages = {
     "cn": "cn-CN",
     "tr": "tr-TR",
     "ar": "ar",
-    "de": "de-DE",
+    "de": "de",
     "fr": "fr-FR",
     "ru": "ru-RU"
 }
@@ -44,6 +45,19 @@ voices = {
     "ru": "ru-RU-Standard-A"
 }
 
+def list_languages() -> dict:
+    """Lists all available languages."""
+    from google.cloud import translate_v2 as translate
+
+    translate_client = translate.Client()
+
+    results = translate_client.get_languages()
+
+    for language in results:
+        print("{name} ({language})".format(**language))
+
+    return results
+
 def audio_to_text(audio_file, debug=False):
     recognizer = sr.Recognizer()
     with sr.AudioFile(audio_file) as source:
@@ -64,15 +78,27 @@ def record_audio():
     CHANNELS = 1
     RATE = 44100
     CHUNK = 1024
-    RECORD_SECONDS = 2
+    RECORD_SECONDS = 5
     current_time_epoch = int(time.time())
     OUTPUT_FILENAME = f"/tmp/{current_time_epoch}_output.wav"
 
     audio = pyaudio.PyAudio()
 
+    print("----------------------record device list---------------------")
+    info = audio.get_host_api_info_by_index(0)
+    numdevices = info.get('deviceCount')
+    for i in range(0, numdevices):
+            if (audio.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+                print("Input Device id ", i, " - ", audio.get_device_info_by_host_api_device_index(0, i).get('name'))
+
+    print("-------------------------------------------------------------")
+
+    index = 0
+    print("recording via index "+str(index))
+
     # Start Recording
     stream = audio.open(format=FORMAT, channels=CHANNELS,
-                        rate=RATE, input=True,
+                        rate=RATE, input=True, input_device_index = index,
                         frames_per_buffer=CHUNK)
     frames = []
 
@@ -133,6 +159,9 @@ def execute(language="es-US", voice="es-US-Studio-B", debug=False):
     os.system('clear')
     while True:
         file_path = record_audio()
+
+        print("Translating...")
+        print(f"File path: {file_path}")
         # translate and post the text in a new thread to avoid losing the next audio.
         temporary_thread = threading.Thread(target=execute_async, args=(language, voice, debug, file_path))
         temporary_thread.start()
@@ -148,16 +177,18 @@ def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_pa
         # convert the audio file to text
         english_text = audio_to_text(file_path, debug=debug)
         # remove the temp file
-        os.system(f"rm {file_path}")
+        # os.system(f"rm {file_path}")
         # avoid empty text
         if not english_text:
             return
 
         translated_text = translate_text(language, english_text)
 
+        print(f"Original: {english_text}")
+        print(f"Translated: {translated_text['translatedText']}")
+
         # post the english text to our API to get the translated text
         post_text(language, translated_text["translatedText"])
-        
         
     except Exception as exc:
         print(f"Error: {exc}")
@@ -189,6 +220,7 @@ def run():
     args = parser.parse_args()
 
     if args.language not in languages:
+        list_languages()
         print("Language not supported")
         exit()
 
