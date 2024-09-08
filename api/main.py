@@ -32,7 +32,7 @@ class Translation(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"version": "0.1.2"}
+    return {"version": "0.1.3"}
 
 # HEALTH endpoints
 
@@ -45,9 +45,9 @@ def read_languages() -> List[str]:
     return list(translations.keys())    
 
 @app.get("/translations/{language}")
-def read_translation(language: str, q: Union[str, None] = None) -> Translation | None:
+def read_translation(language: str, q: Union[str, None] = None) -> Translation:
     if not translations:
-        return None
+        return Translation(language=language, languages=translations.keys(), total=0, messages=[])
 
     if language not in translations.keys():
         return Translation(language=language, languages=translations.keys(), total=0, messages=[])

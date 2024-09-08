@@ -37,9 +37,9 @@ docker push ${ECR_URL}:${DOCKER_TAG}
 # If you are deploying to ECS, you can use AWS CLI to update your ECS service to use the new image
 # This part is optional and depends on your deployment method
 # Example for ECS:
-# CLUSTER_NAME="my-cluster"
-# SERVICE_NAME="my-service"
+CLUSTER_NAME="${CLUSTER_NAME}"
+SERVICE_NAME="${SERVICE_NAME}"
 # echo "Updating ECS service..."
-# aws ecs update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --force-new-deployment
+aws ecs update-service --cluster ${CLUSTER_NAME} --service ${SERVICE_NAME} --force-new-deployment
 
 echo "Deployment complete!"
