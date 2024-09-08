@@ -6,7 +6,7 @@ import logo from "./images/logo.png";
 import background from "./images/background.png";
 
 // API URL - Change this to your API URL
-const URL = 'http://192.168.0.148:8000';
+const URL = 'https://api.aboa.today';
 
 function App() {
   const [language, setLanguage] = useState('german');
