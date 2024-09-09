@@ -1,0 +1,3 @@
+# terraform gitignore
+.terraform
+.terraform.lock.hcl
