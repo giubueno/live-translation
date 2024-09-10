@@ -22,6 +22,7 @@ resource "aws_ecs_task_definition" "api" {
       name      = "live-translation-api"
       image     = "${aws_ecr_repository.api.repository_url}:latest"
       essential = true
+      
       # add environment variables
       environment = [
         {
@@ -115,12 +116,14 @@ resource "aws_lb_target_group" "api" {
   target_type = "ip" 
 
   health_check {
-    path                = "/"
+    path                = "/health"
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 2
     matcher             = "200"
+    protocol            = "HTTP"
+    port                = 80
   }
 
   tags = {
