@@ -11,3 +11,7 @@ output "cloudfront_domain_name" {
 output "api-ecr-repository-name" {
   value = aws_ecr_repository.api.name
 }
+
+output "api-cache-endpoint" {
+  value = "${aws_elasticache_serverless_cache.api.endpoint[0].address}:${aws_elasticache_serverless_cache.api.endpoint[0].port}"
+}

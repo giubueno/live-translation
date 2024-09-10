@@ -22,21 +22,3 @@ resource "aws_s3_access_point" "subdomain" {
   bucket = aws_s3_bucket.subdomain.bucket
   name   = aws_s3_bucket.subdomain.bucket
 }
-
-resource "aws_s3_bucket_policy" "subdomain" {
-  bucket = aws_s3_bucket.subdomain.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Id      = "AllowGetObjects"
-    Statement = [
-      {
-        Sid       = "AllowPublic"
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.subdomain.arn}/**"
-      }
-    ]
-  })
-}

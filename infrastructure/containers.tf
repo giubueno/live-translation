@@ -15,11 +15,20 @@ resource "aws_ecs_task_definition" "api" {
   cpu                      = "256"
   memory                   = "512"
 
+  depends_on = [ aws_elasticache_serverless_cache.api ]
+
   container_definitions = jsonencode([
     {
       name      = "live-translation-api"
       image     = "${aws_ecr_repository.api.repository_url}:latest"
       essential = true
+      # add environment variables
+      environment = [
+        {
+          name  = "REDIS_HOST"
+          value = "${aws_elasticache_serverless_cache.api.endpoint[0].address}:${aws_elasticache_serverless_cache.api.endpoint[0].port}"
+        }
+      ]      
       portMappings = [
         {
           containerPort = 80
@@ -32,7 +41,7 @@ resource "aws_ecs_task_definition" "api" {
         timeout     = 5
         retries     = 3
         startPeriod = 60
-      }      
+      }
     }
   ])
 
