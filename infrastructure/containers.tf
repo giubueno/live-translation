@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "api" {
       environment = [
         {
           name  = "REDIS_HOST"
-          value = "${aws_elasticache_serverless_cache.api.endpoint[0].address}:${aws_elasticache_serverless_cache.api.endpoint[0].port}"
+          value = "${aws_elasticache_serverless_cache.api.endpoint[0].address}"
         }
       ]      
       portMappings = [
@@ -116,7 +116,7 @@ resource "aws_lb_target_group" "api" {
   target_type = "ip" 
 
   health_check {
-    path                = "/health"
+    path                = "/"
     protocol            = "HTTP"
     port                = 80
   }

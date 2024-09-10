@@ -12,6 +12,10 @@ output "api-ecr-repository-name" {
   value = aws_ecr_repository.api.name
 }
 
-output "api-cache-endpoint" {
-  value = "${aws_elasticache_serverless_cache.api.endpoint[0].address}:${aws_elasticache_serverless_cache.api.endpoint[0].port}"
+output "api-cache-host" {
+  value = "${aws_elasticache_serverless_cache.api.endpoint[0].address}"
+}
+
+output "api-cache-port" {
+  value = "${aws_elasticache_serverless_cache.api.endpoint[0].port}"
 }
