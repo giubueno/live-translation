@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "api" {
         }
       ]
       healthCheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:80/health || exit 1"]
+        command     = ["CMD-SHELL", "curl -f http://localhost:80/ || exit 1"]
         interval    = 30
         timeout     = 5
         retries     = 3
@@ -117,11 +117,6 @@ resource "aws_lb_target_group" "api" {
 
   health_check {
     path                = "/health"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    matcher             = "200"
     protocol            = "HTTP"
     port                = 80
   }
