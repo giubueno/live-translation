@@ -36,13 +36,6 @@ resource "aws_ecs_task_definition" "api" {
           hostPort      = 80
         }
       ]
-      healthCheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:80/ || exit 1"]
-        interval    = 30
-        timeout     = 5
-        retries     = 3
-        startPeriod = 60
-      }
     }
   ])
 
