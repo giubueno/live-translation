@@ -19,7 +19,8 @@ languages = {
     "ar": "ar",
     "de": "de",
     "fr": "fr",
-    "ru": "ru"
+    "ru": "ru",
+    "uk": "uk"
 }
 
 friendly_languages = {
@@ -30,7 +31,9 @@ friendly_languages = {
     "ar": "arabic",
     "de": "german",
     "fr": "french",
-    "ru": "russian"
+    "ru": "russian",
+    "uk": "ukranian"
+    
 }
 
 voices = {
@@ -42,7 +45,8 @@ voices = {
     "ar": "ar-XA-Standard-A",
     "de": "de-DE-Standard-A",
     "fr": "fr-FR-Standard-A",
-    "ru": "ru-RU-Standard-A"
+    "ru": "ru-RU-Standard-A",
+    "uk": "uk-UA-Standard-A"
 }
 
 def list_languages() -> dict:
