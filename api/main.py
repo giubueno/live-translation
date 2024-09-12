@@ -12,7 +12,7 @@ REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
 app = FastAPI()
 
 cache = redis.Redis(host=REDIS_HOST, port=6379, decode_responses=True)
-cache.set('version', "0.1.5")
+cache.set('version', "0.1.6")
 
 # Apply the CORSMiddleware with the most permissive settings
 app.add_middleware(

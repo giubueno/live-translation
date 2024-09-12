@@ -12,7 +12,6 @@ services:
       - redis
     environment:
       - REDIS_HOST=redis
-
   redis:
     image: redis:6
     container_name: redis
