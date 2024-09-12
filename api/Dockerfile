@@ -4,6 +4,9 @@ FROM python:3.9-slim
 # Set timezone as Berlin time
 RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
+# install curl
+RUN apt-get update && apt-get install -y curl
+
 # Set the working directory in the container
 WORKDIR /app
 

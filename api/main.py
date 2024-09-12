@@ -10,9 +10,7 @@ import json
 REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
 
 app = FastAPI()
-
-cache = redis.Redis(host=REDIS_HOST, port=6379, decode_responses=True)
-cache.set('version', "0.1.6")
+cache = redis.Redis(host=REDIS_HOST, port=6379, ssl=True, decode_responses=True, db=0)
 
 # Apply the CORSMiddleware with the most permissive settings
 app.add_middleware(
@@ -34,6 +32,7 @@ class Translation(BaseModel):
     languages: List[str]
 
 def get_translations():
+    cache = get_cache()
     translations = cache.get('translations')
     if translations:
         return json.loads(translations)
@@ -44,12 +43,15 @@ def get_translations():
     return translations
 
 def set_translations(translations):
+    cache = get_cache()
     cache.set('translations', json.dumps(translations))
+
+def get_cache():
+    return redis.Redis(host=REDIS_HOST, port=6379, ssl=True, decode_responses=True, db=0)
 
 @app.get("/")
 def read_root():
-    version = cache.get('version')
-    return {"version": version}
+    return {"version": "0.1.11", "redis": cache.ping()}
 
 @app.get("/languages")
 def read_languages() -> List[str]:
