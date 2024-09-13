@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import logo from "./images/logo.png";
 import background from "./images/background.png";
+import he from 'he';
 
 // API URL - Change this to your API URL
 const URL = 'https://api.aboa.today';
@@ -51,7 +52,7 @@ useEffect(() => {
         </FormControl>
       </Grid>
       <Grid id="translations" size={12}>
-        {translation && translation.messages.map((text) => <Typography variant="body1">{text}</Typography>) }
+        {translation && translation.messages.map((text) => <Typography variant="body1">{he.decode(text)}</Typography>) }
         <Typography variant="body1"></Typography>
       </Grid>
     </Grid>
