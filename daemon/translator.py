@@ -14,39 +14,54 @@ import math
 languages = {
     "es": "es",
     "en": "en",
-    "cn": "cn",
+    "zh": "zh",
     "tr": "tr",
     "ar": "ar",
     "de": "de",
     "fr": "fr",
     "ru": "ru",
-    "uk": "uk"
+    "uk": "uk",
+    "fa": "fa",
+    "pl": "pl",
+    "bg": "bg",
+    "pt": "pt",
+    "ro": "ro",
+    "ko": "ko"
 }
 
 friendly_languages = {
-    "es": "spanish",
-    "en": "english",
-    "cn": "chinese",
-    "tr": "turkish",
-    "ar": "arabic",
-    "de": "german",
-    "fr": "french",
-    "ru": "russian",
-    "uk": "ukranian"
-    
+    "es": "Español",       # Spanish
+    "en": "English",       # English
+    "zh": "中文",           # Chinese
+    "tr": "Türkçe",        # Turkish
+    "ar": "العربية",       # Arabic
+    "de": "Deutsch",       # German
+    "fr": "Français",      # French
+    "ru": "Русский",       # Russian
+    "uk": "Українська",    # Ukrainian
+    "fa": "فارسی",         # Persian
+    "pl": "Polski",        # Polish
+    "bg": "Български",     # Bulgarian
+    "pt": "Português",     # Portuguese
+    "ro": "Română",        # Romanian
+    "ko": "한국어"           # Korean
 }
 
 voices = {
     "es": "es-US-Studio-B",
     "en": "en-US-Standard-C",
     "pt": "pt-BR-Neural2-B",
-    "cn": "cmn-CN-Standard-A",
+    "zh": "cmn-CN-Standard-A",
     "tr": "tr-TR-Standard-A",
     "ar": "ar-XA-Standard-A",
     "de": "de-DE-Standard-A",
     "fr": "fr-FR-Standard-A",
     "ru": "ru-RU-Standard-A",
-    "uk": "uk-UA-Standard-A"
+    "uk": "uk-UA-Standard-A",
+    "fa": "fa-IR-Standard-A",
+    "pl": "pl-PL-Standard-A",
+    "bg": "bg-BG-Standard-A",
+    "ko": "ko-KR-Standard-A"
 }
 
 def list_languages() -> dict:
