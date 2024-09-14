@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { FormControl, Select, MenuItem, InputLabel, Box } from '@mui/material';
+import React, {useState, useEffect, useRef} from 'react';
+import { FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import Typography from '@mui/material/Typography';
 import logo from "./images/logo.png";
@@ -12,10 +12,15 @@ const URL = 'https://api.aboa.today';
 function App() {
   const [language, setLanguage] = useState('german');
   const [translation, setTranslation] = useState();
+  const translationsEndRef = useRef(null);
 
   const handleChange = (event) => {
     setLanguage(event.target.value);
-  }; 
+  };
+
+  const scrollToBottom = () => {
+    translationsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   
   // Fetch data from API every 5 seconds
 // Fetch data from API every 5 seconds
@@ -34,9 +39,13 @@ useEffect(() => {
   return () => clearInterval(intervalId); // Cleanup interval on unmount
 }, [language]);
 
+useEffect(() => {
+  scrollToBottom();
+}, [translation]);
+
   return (
     <Grid container spacing={4}>
-      <Grid id="top" size={12} style={{ backgroundImage: `url(${background})` }}>
+      <Grid id="top" size={12} className="sticky-top" style={{ backgroundImage: `url(${background})` }}>
         <img id="logo" src={logo} alt="Logo"/>
         <FormControl id="language" sx={{ width: 200 }}>
           <InputLabel id="demo-simple-select-label">Select a language</InputLabel>
@@ -54,6 +63,7 @@ useEffect(() => {
       <Grid id="translations" size={12}>
         {translation && translation.messages.map((text) => <Typography variant="body1">{he.decode(text)}</Typography>) }
         <Typography variant="body1"></Typography>
+        <div ref={translationsEndRef} />
       </Grid>
     </Grid>
   );
