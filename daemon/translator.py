@@ -97,7 +97,7 @@ def record_audio():
     CHANNELS = 1
     RATE = 44100
     CHUNK = 1024
-    RECORD_SECONDS = 5
+    RECORD_SECONDS = 3
     current_time_epoch = int(time.time())
     OUTPUT_FILENAME = f"/tmp/{current_time_epoch}_output.wav"
 
