@@ -32,8 +32,6 @@ languages = {
     "ko": "korean"
 }
 
-    
-
 friendly_languages = {
     "es": "Español",       # Spanish
     "en": "English",       # English
