@@ -10,24 +10,29 @@ import argparse
 import threading
 import requests
 import math
+import google.generativeai as genai
+import pathlib
+import json
 
 languages = {
-    "es": "es",
-    "en": "en",
-    "zh": "zh",
-    "tr": "tr",
-    "ar": "ar",
-    "de": "de",
-    "fr": "fr",
-    "ru": "ru",
-    "uk": "uk",
-    "fa": "fa",
-    "pl": "pl",
-    "bg": "bg",
-    "pt": "pt",
-    "ro": "ro",
-    "ko": "ko"
+    "es": "spanish",
+    "en": "english",
+    "zh": "chinese",
+    "tr": "turkish",
+    "ar": "arabic",
+    "de": "german",
+    "fr": "french",
+    "ru": "russian",
+    "uk": "ukrainian",
+    "fa": "persian",
+    "pl": "polish",
+    "bg": "bulgarian",
+    "pt": "portuguese",
+    "ro": "romanian",
+    "ko": "korean"
 }
+
+    
 
 friendly_languages = {
     "es": "Español",       # Spanish
@@ -76,6 +81,58 @@ def list_languages() -> dict:
         print("{name} ({language})".format(**language))
 
     return results
+
+def gemini_audio_to_text(lang="es", voice="es-US-Studio-B", debug=False, file_path=""):
+    if file_path == "":
+        return
+
+    if not os.path.exists(file_path):
+        return
+    
+    # Initialize a Gemini model appropriate for your use case.
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+
+    language = languages[lang]
+
+    # Create the prompt.
+    prompt = f"Generate a transcript of the speech in {language} and respond with "
+    prompt += "only a json with two attributes success: boolean, transcription: string."
+
+    # create a Blob object from audio file path
+    audio_blob = {
+        "mime_type": "audio/wav",
+        "data": pathlib.Path(file_path).read_bytes()
+    }
+
+    # Pass the prompt and the audio file to Gemini.
+    response = model.generate_content([prompt, audio_blob])
+    
+    if response._error:
+        print("ERROR: ", response._error)
+        return
+    
+    if "I am sorry, I cannot fulfill your request." in response.text:
+        print("ERROR: ", response.text)
+        return
+
+    if "I am sorry, I cannot provide you with a transcript of the speech in" in response.text:
+        print("ERROR: ", response.text)
+        return
+
+    # Parse the JSON response text
+    try:
+        cleaned_response = response.text.replace("```json", "").replace("```", "")
+        json_response = json.loads(cleaned_response)
+        print(json_response)
+        if not json_response["success"]:
+            print("ERROR: Failed to transcribe the audio.")
+        else:
+            post_text(lang, json_response["transcription"])
+    except json.JSONDecodeError as e:
+        print("ERROR: Failed to parse JSON response:", e)
+        print(response.text)
+
+    return
 
 def audio_to_text(audio_file, debug=False):
     recognizer = sr.Recognizer()
@@ -174,6 +231,14 @@ def translate_text(target: str, text: str) -> dict:
     result = translate_client.translate(text, target_language=target)
     return result
 
+def execute_gemini(language="de", voice="es-US-Studio-B", debug=False):
+    os.system('clear')
+    while True:
+        file_path = record_audio()
+        # translate and post the text in a new thread to avoid losing the next audio.
+        temporary_thread = threading.Thread(target=gemini_audio_to_text, args=(language, voice, debug, file_path))
+        temporary_thread.start()
+
 def execute(language="es-US", voice="es-US-Studio-B", debug=False):
     os.system('clear')
     while True:
@@ -192,7 +257,7 @@ def execute_async(language="es-US", voice="es-US-Studio-B", debug=False, file_pa
     if not os.path.exists(file_path):
         return
 
-    try:
+    try:     
         # convert the audio file to text
         english_text = audio_to_text(file_path, debug=debug)
         # remove the temp file
@@ -243,7 +308,11 @@ def run():
         print("Language not supported")
         exit()
 
-    execute(language=languages[args.language], voice=voices[args.language], debug=args.debug)
+    use_gemini = os.getenv("USE_GEMINI", "False")
+    if use_gemini == "True":
+        execute_gemini(language=args.language, voice=voices[args.language], debug=args.debug)
+    else:
+        execute(language=languages[args.language], voice=voices[args.language], debug=args.debug)
 
 if __name__ == "__main__":
     run()
