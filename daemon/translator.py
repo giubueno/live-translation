@@ -130,6 +130,8 @@ def gemini_audio_to_text(lang="es", voice="es-US-Studio-B", debug=False, file_pa
         print("ERROR: Failed to parse JSON response:", e)
         print(response.text)
 
+    # os.system(f"rm {file_path}")
+
     return
 
 def audio_to_text(audio_file, debug=False):
@@ -146,15 +148,15 @@ def audio_to_text(audio_file, debug=False):
         except sr.RequestError as e:
             print("Could not request results; {0}".format(e))
 
-def record_audio():
+def record_audio(language):
     # Parameters
     FORMAT = pyaudio.paInt16
     CHANNELS = 1
     RATE = 44100
     CHUNK = 1024
-    RECORD_SECONDS = 3
+    RECORD_SECONDS = 5
     current_time_epoch = int(time.time())
-    OUTPUT_FILENAME = f"/tmp/{current_time_epoch}_output.wav"
+    OUTPUT_FILENAME = f"/tmp/{language}_{current_time_epoch}_output.wav"
 
     audio = pyaudio.PyAudio()
 
@@ -232,7 +234,7 @@ def translate_text(target: str, text: str) -> dict:
 def execute_gemini(language="de", voice="es-US-Studio-B", debug=False):
     os.system('clear')
     while True:
-        file_path = record_audio()
+        file_path = record_audio(language)
         # translate and post the text in a new thread to avoid losing the next audio.
         temporary_thread = threading.Thread(target=gemini_audio_to_text, args=(language, voice, debug, file_path))
         temporary_thread.start()
@@ -240,7 +242,7 @@ def execute_gemini(language="de", voice="es-US-Studio-B", debug=False):
 def execute(language="es-US", voice="es-US-Studio-B", debug=False):
     os.system('clear')
     while True:
-        file_path = record_audio()
+        file_path = record_audio(language)
 
         print("Translating...")
         print(f"File path: {file_path}")
