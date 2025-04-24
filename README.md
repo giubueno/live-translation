@@ -33,3 +33,7 @@ sequenceDiagram
     AutoTranslator->>+WebApp: 7. Translation.
     WebApp->>-Spectator: 8. Translation.
 ```
+
+## Infrastructure
+
+For detailed information about the AWS infrastructure and deployment process, see the [Infrastructure Documentation](infrastructure/README.md).
